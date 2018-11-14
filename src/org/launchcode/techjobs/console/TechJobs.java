@@ -1,8 +1,6 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -46,6 +44,7 @@ public class TechJobs {
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
                     // Print list of skills, employers, etc
+                    Collections.sort(results);
                     for (String item : results) {
                         System.out.println(item);
                     }
@@ -60,14 +59,15 @@ public class TechJobs {
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
 
-                if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
-                } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                //need to add a message if searchterm not found.
+                    if (searchField.equals("all")) {
+                        printJobs(JobData.findByValue(searchTerm));
+                    } else { //maybe make an else if and
+                        printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    }
                 }
             }
         }
-    }
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
@@ -110,7 +110,18 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+        // added to let user know they entered a searchterm that is not in the file.
+        if (someJobs.isEmpty()) {
+            System.out.println("***\nNo Results found. Please try again.\n***");
+        } else {
+        //for job in jobs print key, value
+            for (HashMap<String, String> someJob : someJobs) {
+                System.out.println("*****");
+                for (Map.Entry<String, String> column : someJob.entrySet()) {
+                    System.out.println(column.getKey() + ": " + column.getValue());
+                }
+                System.out.println("*****\n");
+        }
     }
+}
 }
